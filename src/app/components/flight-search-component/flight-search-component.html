@@ -16,10 +16,8 @@
       formControlName="arrivals"
       optionLabel="name"
       placeholder="select your arrival destination"
-    ></p-select>
-    @if (flightForm.hasError('sameCity') && flightForm.touched) {
-    <small class="text-red-500">Departures and Arrival cities must be different</small>
-    }
+    >
+    </p-select>
   </div>
 
   <div class="field flex gap-2">
@@ -39,7 +37,7 @@
   <p-button
     [disabled]="flightForm.invalid"
     [severity]="flightForm.valid ? 'primary' : 'secondary'"
-    (click)="onSubmit()"
+    type="submit"
     >Cerca voli</p-button
   >
 </form>

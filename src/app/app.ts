@@ -3,11 +3,14 @@ import { PrimeNG } from 'primeng/config'; // Il nuovo cuore della v21
 import { ButtonModule } from 'primeng/button';
 import { UserFormComponent } from './components/user-form-component/user-form-component';
 import { FlightSearchComponent } from './components/flight-search-component/flight-search-component';
+import { NavBar } from './components/nav-bar/nav-bar';
+import { RouterOutlet } from '@angular/router';
+import { Header } from './components/header/header';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ButtonModule, UserFormComponent, FlightSearchComponent],
+  imports: [ButtonModule, UserFormComponent, FlightSearchComponent, NavBar, Header, RouterOutlet],
   templateUrl: './app.html',
 })
 export class App implements OnInit {

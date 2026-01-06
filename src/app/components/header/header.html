@@ -1,0 +1,14 @@
+<p-menubar [model]="menu"> <!-- p-menubar Costruisce la barra di navigazione basandosi sull'array menu -->
+  <ng-template pTemplate="end">
+    <div class="flex align-items-center gap-2">
+      <p-splitButton
+        label="Profile"
+        icon="pi pi-user"
+        (onClick)="goToProfile()"
+        [model]="userOptions"
+        styleClass="p-button-sm"
+      >
+      </p-splitButton>
+    </div>
+  </ng-template>
+</p-menubar>
