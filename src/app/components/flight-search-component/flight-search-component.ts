@@ -1,12 +1,5 @@
-import { Component, inject } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { Component, computed, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -29,46 +22,33 @@ import { Select } from 'primeng/select';
 export class FlightSearchComponent {
   private fb = inject(FormBuilder);
 
-  departuresFrom = [
+  cities = signal([
     { name: 'New York', code: 'NYC' },
     { name: 'London', code: 'LON' },
     { name: 'Paris', code: 'PAR' },
-  ];
+  ]);
 
-  arrivalsTo = [
-    { name: 'New York', code: 'NYC' },
-    { name: 'London', code: 'LON' },
-    { name: 'Paris', code: 'PAR' },
-  ];
+  selectedDeparture = signal<{ name: string; code: string } | null>(null);
+  arrivalsList = computed(() => {
+    const departure = this.selectedDeparture();
+    if (!departure) {
+      return this.cities();
+    }
+    return this.cities().filter((c) => c.code !== departure.code);
+  });
 
-  arrivalsDeparturesValidator(): ValidatorFn {
-    return (formGroup: AbstractControl): ValidationErrors | null => {
-      const departures = formGroup.get('departures')?.value;
-      const arrivals = formGroup.get('arrivals')?.value;
+  flightForm = this.fb.group({
+    departures: [null, Validators.required],
+    arrivals: [null, Validators.required],
+    dates: [null, Validators.required],
+    passengers: [1, [Validators.required, Validators.min(1)]],
+  });
 
-      if (!departures || !arrivals) {
-        return null;
-      }
-
-      if (departures.code === arrivals.code) {
-        return { sameCity: true };
-      }
-
-      return null;
-    };
+  constructor() {
+    this.flightForm.get('departures')?.valueChanges.subscribe((city) => {
+      this.selectedDeparture.set(city);
+    });
   }
-
-  flightForm = this.fb.group(
-    {
-      departures: [null, Validators.required],
-      arrivals: [null, Validators.required],
-      dates: [null, Validators.required],
-      passengers: [1, [Validators.required, Validators.min(1)]],
-    },
-    {
-      validators: this.arrivalsDeparturesValidator(),
-    },
-  );
 
   onSubmit() {
     if (this.flightForm.valid) {

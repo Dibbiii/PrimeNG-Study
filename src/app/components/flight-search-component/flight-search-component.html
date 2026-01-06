@@ -2,7 +2,7 @@
   <div class="field flex gap-2">
     <label>Departure From</label>
     <p-select
-      [options]="departuresFrom"
+      [options]="cities()"
       formControlName="departures"
       optionLabel="name"
       placeholder="select the departure city"
@@ -12,7 +12,7 @@
   <div class="field flex gap-2">
     <label>Arrival To</label>
     <p-select
-      [options]="arrivalsTo"
+      [options]="arrivalsList()"
       formControlName="arrivals"
       optionLabel="name"
       placeholder="select your arrival destination"
