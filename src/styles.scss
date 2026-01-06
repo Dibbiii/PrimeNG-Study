@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+/* Reset CSS base */
+body {
+  margin: 0;
+  font-family: var(--font-family); /* Usa il font definito dal tema PrimeNG */
+}
