@@ -1,0 +1,30 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-2 p-5">
+  <div class="field flex gap-2">
+    <label>Username</label>
+    <input pInputText formControlName="username" />
+  </div>
+
+  <div class="field flex gap-2">
+    <label>Ruolo</label>
+    <p-select
+      [options]="roles"
+      formControlName="role"
+      optionLabel="name"
+      placeholder="Seleziona ruolo"
+    >
+    </p-select>
+  </div>
+
+  <div class="field flex gap-2">
+    <label>Date Disponibili</label>
+    <p-datepicker
+      formControlName="availability"
+      selectionMode="range"
+      iconDisplay="input"
+      [readonlyInput]="true"
+    >
+    </p-datepicker>
+  </div>
+
+  <p-button label="Salva" type="submit" [disabled]="userForm.invalid"></p-button>
+</form>

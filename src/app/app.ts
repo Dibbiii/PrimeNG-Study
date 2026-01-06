@@ -1,17 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { PrimeNG } from 'primeng/config'; // Il nuovo cuore della v21
 import { ButtonModule } from 'primeng/button';
+import { UserFormComponent } from './components/user-form-component/user-form-component';
+import { FlightSearchComponent } from './components/flight-search-component/flight-search-component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ButtonModule],
-  template: `
-    <div class="p-5 flex flex-column align-items-center gap-3">
-      <h1>Benvenuta nel corso PrimeNG v21</h1>
-      <p-button label="Cliccami" icon="pi pi-check" (onClick)="testRipple()"></p-button>
-    </div>
-  `,
+  imports: [ButtonModule, UserFormComponent, FlightSearchComponent],
+  templateUrl: './app.html',
 })
 export class App implements OnInit {
   // Injection del nuovo servizio v21

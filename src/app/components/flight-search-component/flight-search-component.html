@@ -1,0 +1,45 @@
+<form [formGroup]="flightForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-2 p-5">
+  <div class="field flex gap-2">
+    <label>Departure From</label>
+    <p-select
+      [options]="departuresFrom"
+      formControlName="departures"
+      optionLabel="name"
+      placeholder="select the departure city"
+    ></p-select>
+  </div>
+
+  <div class="field flex gap-2">
+    <label>Arrival To</label>
+    <p-select
+      [options]="arrivalsTo"
+      formControlName="arrivals"
+      optionLabel="name"
+      placeholder="select your arrival destination"
+    ></p-select>
+    @if (flightForm.hasError('sameCity') && flightForm.touched) {
+    <small class="text-red-500">Departures and Arrival cities must be different</small>
+    }
+  </div>
+
+  <div class="field flex gap-2">
+    <label>Trip Dates</label>
+    <p-datepicker
+      formControlName="dates"
+      selectionMode="range"
+      iconDisplay="input"
+      [readonlyInput]="true"
+    ></p-datepicker>
+  </div>
+
+  <div class="field flex gap-2">
+    <label>Passengers</label>
+    <p-inputNumber [showButtons]="true" formControlName="passengers" [min]="1"></p-inputNumber>
+  </div>
+  <p-button
+    [disabled]="flightForm.invalid"
+    [severity]="flightForm.valid ? 'primary' : 'secondary'"
+    (click)="onSubmit()"
+    >Cerca voli</p-button
+  >
+</form>
