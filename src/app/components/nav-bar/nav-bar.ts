@@ -30,7 +30,7 @@ export class NavBar implements OnInit { //implement OnInit perchè così siamo o
       {
         label: 'Utenti',
         icon: 'pi pi-users',
-        routerLink: ['/users'], // Navigazione
+        routerLink: ['/users/form'], // Navigazione
       },
     ];
 
