@@ -1,10 +1,10 @@
 <p-table [value]="users">
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="name" style="width: 20%">
+      <th pSortableColumn="username" style="width: 20%">
         <div class="flex align-items-center gap-2">
           Name
-          <p-sortIcon field="name" />
+          <p-sortIcon field="username" />
         </div>
       </th>
       <th pSortableColumn="email" style="width: 30%">
@@ -13,20 +13,20 @@
           <p-sortIcon field="email" />
         </div>
       </th>
-      <th style="width: 15%">Status</th>
-      <th style="width: 15%">Actions</th>
+      <!-- <th style="width: 15%">Status</th>
+      <th style="width: 15%">Actions</th> -->
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-user>
     <tr>
-      <td>{{user.name}}</td>
+      <td>{{user.username}}</td>
       <td>{{user.email}}</td>
-      <td>
+      <!-- <td>
         <p-tag
           [value]="user.active ? 'ATTIVO' : 'BANNATO' "
           [severity]="user.active ? 'success' : 'danger' "
         ></p-tag>
-      </td>
+      </td> -->
       <td>
         <p-button
           [rounded]="true"
