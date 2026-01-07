@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-server-table-component',
   standalone: true,
-  imports: [ButtonModule, TableModule,TagModule, PrimeTemplate, CommonModule],
+  imports: [ButtonModule, TableModule, TagModule, PrimeTemplate, CommonModule],
   templateUrl: './server-table-component.html',
   styleUrl: './server-table-component.scss',
 })
@@ -31,17 +31,17 @@ export class ServerTableComponent implements OnInit {
 
     this.totalRecords = this.allUsersFromDatabase.length;
     this.isLoading = true;
-    this.loadUsers({ first: 0, rows: 10 });
   }
 
   loadUsers(event: TableLazyLoadEvent) {
     this.isLoading = true;
     setTimeout(() => {
-      let data = [...this.allUsersFromDatabase]; 
+      let data = [...this.allUsersFromDatabase];
       //[...] Prende tutti gli elementi dell'array originale e li "spalma" dentro un **nuovo** array.
-      // Senza i puntini data non sarebbe un nuovo array, ma solo un "soprannome" (riferimento) per 
+      // Senza i puntini data non sarebbe un nuovo array, ma solo un "soprannome" (riferimento) per
       // l'array originale. Se ordino `data`, modifico direttamente anche `allUsersFromDatabase`
-      if(event.sortField){ //event.sortField è il nome della colonna (nome o email)
+      if (event.sortField) {
+        //event.sortField è il nome della colonna (nome o email)
         data.sort((data1: any, data2: any) => {
           const field = event.sortField as string; //metto as string perchè sortField potrebbe anche essere un Array nel caso in cui ammettessimo il multisort, però nel nostro caso ordiniamo sempre o in base al nome o in base alla mail, mai in base a entrambi e quindi sortField sarà sempre una stringa
           let value1 = data1[field];
@@ -58,16 +58,16 @@ export class ServerTableComponent implements OnInit {
           return event.sortOrder === -1 ? -result : result;
         });
       }
-      
+
       const start = event.first || 0;
       const end = start + (event.rows || 10);
 
       this.users = data.slice(start, end);
       this.isLoading = false;
-    }, 2000);
+    }, 10);
   }
 
-  editUser(user: string) {
-    alert('Utente ' + user + 'modificato!');
+  editUser(user: User) {
+    alert('Utente ' + user.name + ' modificato!');
   }
 }

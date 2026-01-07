@@ -2,7 +2,7 @@
   [value]="users"
   [lazy]="true"
   [paginator]="true"
-  [rows]="5"
+  [rows]="10"
   [totalRecords]="totalRecords"
   [loading]="isLoading"
   (onLazyLoad)="loadUsers($event)"
@@ -51,7 +51,7 @@
           icon="pi pi-pencil"
           [rounded]="true"
           [text]="true"
-          (click)="editUser(user)"
+          (onClick)="editUser(user.name)"
         ></p-button>
       </td>
     </tr>
