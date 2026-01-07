@@ -1,6 +1,6 @@
 import { ApplicationConfig } from '@angular/core';
-//import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+//import { provideAnimations } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura'; // Importiamo il tema Aura
 import { provideRouter } from '@angular/router';
@@ -10,8 +10,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     // 1. Abilitiamo le animazioni (essenziali per dropdown, dialog, ecc.)
     // Usiamo 'Async' per non bloccare il caricamento iniziale della pagina (Lazy loading delle animazioni)
-    //provideAnimationsAsync(),
-    provideAnimations(),
+    provideAnimationsAsync(),
+    //provideAnimations(),
 
     provideRouter(routes),
 
