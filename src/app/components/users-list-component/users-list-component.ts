@@ -4,6 +4,7 @@ import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { PrimeTemplate } from 'primeng/api';
+import { User } from '../../interfaces/user-interface';
 
 @Component({
   selector: 'app-users-list-component',
