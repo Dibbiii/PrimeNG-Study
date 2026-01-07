@@ -4,19 +4,20 @@
   [paginator]="true"
   [rows]="10"
   [totalRecords]="totalRecords"
-  [loading]="isLoading"
   (onLazyLoad)="loadUsers($event)"
-  dataKey="id" 
+  dataKey="id"
 >
   <ng-template pTemplate="header">
     <tr>
       <th width="5%"></th>
+
       <th pSortableColumn="name" width="20%">
         <div class="flex align-items-center gap-2">
           Name
           <p-sortIcon field="name" />
         </div>
       </th>
+
       <th pSortableColumn="email" width="20%">
         <div class="flex align-items-center gap-2">
           Email
@@ -46,12 +47,13 @@
           [severity]="user.active ? 'success' : 'danger' "
         ></p-tag>
       </td>
+
       <td>
         <p-button
           icon="pi pi-pencil"
           [rounded]="true"
           [text]="true"
-          (onClick)="editUser(user.name)"
+          (onClick)="editUser(user)"
         ></p-button>
       </td>
     </tr>
