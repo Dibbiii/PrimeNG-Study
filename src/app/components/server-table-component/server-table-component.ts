@@ -4,7 +4,7 @@ import { Table } from '../../interfaces/table-interface';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { PrimeTemplate } from 'primeng/api';
+import { MessageService, PrimeTemplate } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { ApiService } from '../../services/api-service';
@@ -13,11 +13,28 @@ import { switchMap, tap, debounceTime } from 'rxjs/operators';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { UserDetailDialog } from '../user-detail-dialog/user-detail-dialog';
+import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-server-table-component',
   standalone: true,
-  imports: [ButtonModule, TableModule, TagModule, PrimeTemplate, CommonModule, RippleModule, InputTextModule, InputIconModule, IconFieldModule],
+  providers: [DialogService, MessageService],
+  imports: [
+    ButtonModule,
+    TableModule,
+    TagModule,
+    PrimeTemplate,
+    CommonModule,
+    RippleModule,
+    InputTextModule,
+    InputIconModule,
+    IconFieldModule,
+    ToastModule,
+    TooltipModule,
+  ],
   templateUrl: './server-table-component.html',
   styleUrl: './server-table-component.scss',
 })
@@ -31,6 +48,11 @@ export class ServerTableComponent {
     sortOrder: 1,
     filters: {},
   });
+
+  private dialogService = inject(DialogService);
+  private messageService = inject(MessageService);
+
+  ref: DynamicDialogRef<any> | null = null;
 
   loading = signal<boolean>(true);
 
@@ -74,7 +96,7 @@ export class ServerTableComponent {
   onFilterChange(field: string, value: string) {
     this.table.update((current) => ({
       ...current,
-      first: 0, // Reset a pagina 1 quando si filtra! Importante UX!
+      first: 0, // Reset a pagina 1 quando si filtra
       filters: { ...current.filters, [field]: value },
     }));
   }
@@ -101,7 +123,37 @@ export class ServerTableComponent {
     });
   }
 
-  editUser(event: User) {
-    alert(`Editing user ${event.username}`);
+  showUserDetails(user: User) {
+    this.ref = this.dialogService.open(UserDetailDialog, {
+      header: `Dettagli di ${user.username}`,
+      width: '50vw',
+      modal: true,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw',
+      },
+      styleClass: 'custom-dialog-header',
+      data: {
+        user: user,
+      },
+    });
+
+    if (this.ref) {
+      this.ref.onClose.subscribe((result) => {
+        if (result && result.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Operazione Completata',
+            detail: `L'utente ${user.username} è stato gestito.`,
+          });
+        }
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 }

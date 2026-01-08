@@ -1,0 +1,24 @@
+<div class="p-4">
+  <h3>Dettagli Utente</h3>
+  
+  <p><strong>Username:</strong> {{ getUser().username }}</p>
+  <p><strong>Email:</strong> {{ getUser().email }}</p>
+  <p><strong>ID:</strong> {{ getUser().id }}</p>
+
+  <!-- Footer con bottoni -->
+  <div class="flex gap-2 mt-4">
+    <p-button 
+      label="Annulla" 
+      icon="pi pi-times"
+      (onClick)="close()"
+      severity="secondary"
+    />
+    
+    <p-button 
+      label="Salva" 
+      icon="pi pi-check"
+      (onClick)="save()"
+      severity="success"
+    />
+  </div>
+</div>

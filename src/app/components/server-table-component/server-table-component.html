@@ -1,3 +1,4 @@
+<p-toast /> <!-- mettendo p-toast fuori dalla tabella permetto al messageService di  di mostrare i toast in qualsiasi momento, senza doverlo ripetere ad ogni riga della tabella-->
 <div class="mb-3 flex gap-3">
   <p-iconField iconPosition="left">
     <p-inputIcon>
@@ -80,13 +81,13 @@
 
       <td>
         <p-button
-          icon="pi pi-pencil"
+          icon="pi pi-search"
           [rounded]="true"
           [text]="true"
-          (onClick)="editUser(user)"
-          [attr.aria-label]="'Modifica ' + user.username"
-          title="Modifica utente"
-        />
+          pTooltip="Vedi Dettagli (Dialog)"
+          tooltipPosition="top"
+          (onClick)="showUserDetails(user)"
+        ></p-button>
       </td>
     </tr>
   </ng-template>
