@@ -5,6 +5,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura'; // Importiamo il tema Aura
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
 
     provideRouter(routes),
 
+    provideHttpClient(withFetch()),
     // 2. Configuriamo PrimeNG
     providePrimeNG({
       // Gestione del Tema (Styled Mode)

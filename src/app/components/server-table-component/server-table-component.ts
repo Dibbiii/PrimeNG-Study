@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { User } from '../../interfaces/user-interface';
 import { Table } from '../../interfaces/table-interface';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
@@ -9,11 +9,11 @@ import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { ApiService } from '../../services/api-service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { switchMap, tap, debounceTime } from 'rxjs/operators';
+import { switchMap, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { UserDetailDialog } from '../user-detail-dialog/user-detail-dialog';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
@@ -38,7 +38,7 @@ import { TooltipModule } from 'primeng/tooltip';
   templateUrl: './server-table-component.html',
   styleUrl: './server-table-component.scss',
 })
-export class ServerTableComponent {
+export class ServerTableComponent implements OnDestroy {
   apiService = inject(ApiService);
 
   table = signal<Table>({
@@ -52,6 +52,7 @@ export class ServerTableComponent {
   private dialogService = inject(DialogService);
   private messageService = inject(MessageService);
 
+  // Questa variabile terrà il riferimento alla finestra aperta
   ref: DynamicDialogRef<any> | null = null;
 
   loading = signal<boolean>(true);
@@ -60,6 +61,8 @@ export class ServerTableComponent {
 
   userResource = toSignal(
     toObservable(this.table).pipe(
+      // Applica distinctUntilChanged per evitare chiamate API duplicate
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       debounceTime(300),
       tap(() => this.loading.set(true)),
       switchMap((state) => {
@@ -82,8 +85,11 @@ export class ServerTableComponent {
   users = computed(() => this.userResource().users);
   totalRecords = computed(() => this.userResource().total);
 
+  /**
+   * Gestisce il caricamento pigro della tabella.
+   * Aggiorna lo stato della tabella quando l'utente cambia pagina o ordina.
+   */
   loadUsers(event: TableLazyLoadEvent) {
-    // Aggiorno il signal. Questo scatenerà a cascata la chiamata API.
     this.table.update((current) => ({
       ...current,
       first: event.first || 0,
@@ -93,11 +99,26 @@ export class ServerTableComponent {
     }));
   }
 
+  /**
+   * Gestisce il cambio del filtro di ricerca.
+   * Quando il filtro cambia, resetta la pagina a 0 per mostrare i risultati dal primo match.
+   */
   onFilterChange(field: string, value: string) {
     this.table.update((current) => ({
       ...current,
-      first: 0, // Reset a pagina 1 quando si filtra
+      first: 0, // Reset alla pagina 1 quando si filtra - FONDAMENTALE per la ricerca corretta
       filters: { ...current.filters, [field]: value },
+    }));
+  }
+
+  /**
+   * Resetta tutti i filtri di ricerca e torna alla prima pagina
+   */
+  clearFilters() {
+    this.table.update((current) => ({
+      ...current,
+      first: 0,
+      filters: {},
     }));
   }
 
@@ -124,7 +145,10 @@ export class ServerTableComponent {
   }
 
   showUserDetails(user: User) {
+    // creo il componente UserDetailDialog dal nulla -> meglio rispetto a mettere [visible]="true"
     this.ref = this.dialogService.open(UserDetailDialog, {
+      // Anche se non è esplicitamente scritto, PrimeNG qui sta appendendo questo dialogo
+      // al <body>, risolvendo i problemi di z-index e overflow
       header: `Dettagli di ${user.username}`,
       width: '50vw',
       modal: true,
@@ -133,6 +157,8 @@ export class ServerTableComponent {
         '640px': '90vw',
       },
       styleClass: 'custom-dialog-header',
+      // Qui passiamo l'oggetto User al figlio.
+      // Il figlio lo leggerà tramite DynamicDialogConfig.
       data: {
         user: user,
       },
@@ -140,8 +166,10 @@ export class ServerTableComponent {
 
     if (this.ref) {
       this.ref.onClose.subscribe((result) => {
+        // Mi iscrivo all'evento di chiusura del dialogo
         if (result && result.success) {
           this.messageService.add({
+            // MessageService per lanciare un feedback
             severity: 'success',
             summary: 'Operazione Completata',
             detail: `L'utente ${user.username} è stato gestito.`,
@@ -151,6 +179,8 @@ export class ServerTableComponent {
     }
   }
 
+  // Se l'utente cambia pagina mentre il dialog è aperto, lo distruggo manualmente
+  // Per evitare Memory Leaks (orfani nel DOM)
   ngOnDestroy() {
     if (this.ref) {
       this.ref.close();

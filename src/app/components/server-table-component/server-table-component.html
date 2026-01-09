@@ -1,5 +1,8 @@
-<p-toast /> <!-- mettendo p-toast fuori dalla tabella permetto al messageService di  di mostrare i toast in qualsiasi momento, senza doverlo ripetere ad ogni riga della tabella-->
-<div class="mb-3 flex gap-3">
+<p-toast />
+
+<!-- mettendo p-toast fuori dalla tabella permetto al messageService di mostrare i toast in qualsiasi momento, senza doverlo ripetere ad ogni riga della tabella -->
+
+<div class="mb-3 flex gap-3 flex-wrap align-items-end">
   <p-iconField iconPosition="left">
     <p-inputIcon>
       <i class="pi pi-search"></i>
@@ -25,14 +28,29 @@
       aria-label="Filtra per email"
     />
   </p-iconField>
+
+  <p-button
+    icon="pi pi-times"
+    label="Cancella Filtri"
+    severity="secondary"
+    [text]="true"
+    (onClick)="clearFilters()"
+    pTooltip="Ripristina la visualizzazione di tutti gli utenti"
+    tooltipPosition="top"
+    aria-label="Cancella tutti i filtri di ricerca"
+  />
 </div>
 
+<!-- Tabella utenti con lazy loading, ordinamento, paginazione ed espansione righe.
+     tableStyle assicura una larghezza minima di 60rem per comportamento responsive coerente.
+     scrollable e scrollHeight permettono lo scroll verticale con header fisso. -->
 <p-table
   #dt
   [value]="users()"
   [lazy]="true"
   [loading]="loading()"
   [paginator]="true"
+  [first]="table().first"
   [rows]="10"
   [totalRecords]="totalRecords()"
   (onLazyLoad)="loadUsers($event)"
@@ -40,7 +58,9 @@
   [expandedRowKeys]="expandedRowKeys()"
   (onRowExpand)="onRowExpand($event)"
   (onRowCollapse)="onRowCollapse($event)"
-  responsiveLayout="scroll"
+  [tableStyle]="{ 'min-width': '60rem' }"
+  [scrollable]="true"
+  scrollHeight="600px"
   ariaLabel="Tabella utenti con possibilità di ordinamento e espansione"
 >
   <ng-template pTemplate="header">
@@ -87,6 +107,7 @@
           pTooltip="Vedi Dettagli (Dialog)"
           tooltipPosition="top"
           (onClick)="showUserDetails(user)"
+          aria-label="Mostra dettagli dell'utente"
         ></p-button>
       </td>
     </tr>

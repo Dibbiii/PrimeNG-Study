@@ -1,0 +1,59 @@
+<div class="p-5 surface-ground min-h-screen">
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <p-card header="Organigramma Aziendale Gerarchico">
+        <p-tree
+          [value]="files()"
+          selectionMode="single"
+          [(selection)]="selectedNode"
+          (onNodeSelect)="onNodeSelect($event)"
+          [filter]="true"
+          filterPlaceholder="Cerca dipendente..."
+          scrollHeight="400px"
+        ></p-tree>
+
+        <div class="mt-4">
+          <p>
+            Nodo Selezionato: @if(selectedNode(); as node){
+            <strong>{{node.label}}</strong>
+            <small class="block text-secondary mt-1">Tipo: {{node.type}}</small>
+            } @else {
+            <span class="text-500">Nessuno</span>
+            }
+          </p>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <p-card header="Azioni Avanzate (Directives)">
+        <p>Clicca sott per gestire i permessi (pStyleClass Animations)</p>
+
+        <p-button
+          label="Apri Pannello Permessi"
+          icon="pi pi-cog"
+          pStyleClass="#mySidebar" 
+          toggleClass="sidebar-visible" 
+        ></p-button>
+      </p-card>
+    </div>
+  </div>
+</div>
+
+<div id="mySidebar" class="sidebar-panel">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2 class="m-0">Permessi Utente</h2>
+
+    <p-button
+      icon="pi pi-times"
+      [rounded]="true"
+      [text]="true"
+      pStyleClass="#mySidebar"
+      enterToClass="sidebar-visible"
+      leaveToClass="transform translate-x-full"
+      toggleClass="sidebar-visible"
+    ></p-button>
+  </div>
+  <p>Qui useremo la PickList nella prossima lezione per trascinare i permessi!</p>
+  <div class="p-3 border-1 border-round surface-border mt-3">Configurazione avanzata...</div>
+</div>

@@ -16,7 +16,7 @@ export class UserDetailDialog {
   ref = inject(DynamicDialogRef); //DynamicDialogRef per controllare la finestra (chiudere o passare dati indietro)
 
   getUser(): User {
-    return this.config.data.user; //'data' è l'oggetto passato dal padre
+    return this.config.data.user; //'data' è l'oggetto passato dal padre 
   }
   
   close(){
