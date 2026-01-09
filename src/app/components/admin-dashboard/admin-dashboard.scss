@@ -3,16 +3,24 @@
   top: 0;
   right: 0;
   height: 100vh;
-  width: 300px;
+  width: fit-content;
+  min-width: 400px;
+  max-width: 90vw;
   background: white;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   padding: 2rem;
   transition: transform 0.3s ease-in-out;
   transform: translateX(100%); /* Nascosta di default (fuori schermo a destra) */
+  overflow-y: auto; // Per gestire lo scroll verticale
 }
 
 /* Classe attiva che la fa entrare */
 .sidebar-visible {
   transform: translateX(0);
+}
+
+/* Stile custom per la PickList nella sidebar stretta */
+:host ::ng-deep .p-picklist .p-picklist-list {
+  height: 300px; /* Altezza fissa per lo scroll */
 }

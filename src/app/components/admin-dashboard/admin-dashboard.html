@@ -27,13 +27,13 @@
 
     <div class="col-12 md:col-6">
       <p-card header="Azioni Avanzate (Directives)">
-        <p>Clicca sott per gestire i permessi (pStyleClass Animations)</p>
+        <p>Clicca sotto per gestire i permessi (pStyleClass Animations)</p>
 
         <p-button
           label="Apri Pannello Permessi"
           icon="pi pi-cog"
-          pStyleClass="#mySidebar" 
-          toggleClass="sidebar-visible" 
+          pStyleClass="#mySidebar"
+          toggleClass="sidebar-visible"
         ></p-button>
       </p-card>
     </div>
@@ -54,6 +54,44 @@
       toggleClass="sidebar-visible"
     ></p-button>
   </div>
-  <p>Qui useremo la PickList nella prossima lezione per trascinare i permessi!</p>
-  <div class="p-3 border-1 border-round surface-border mt-3">Configurazione avanzata...</div>
+
+  <div class="mb-3">
+    @if (selectedNode(); as node) {
+    <p class="text-sm text-600">
+      Assegna permessi a: <strong class="text-900">{{ node.label }}</strong>
+    </p>
+    } @else {
+    <p class="text-sm text-red-500">Seleziona un utente dall'albero per iniziare.</p>
+    }
+  </div>
+
+  <p-picklist
+    [source]="sourcePermissions()"
+    [target]="targetPermissions()"
+    sourceHeader="Permessi Disponibili"
+    targetHeader="Permessi Assegnati"
+    [dragdrop]="true"
+    [responsive]="true"
+    filterBy="name"
+    sourceFilterPlaceholder="Cerca permesso..."
+    targetFilterPlaceholder="Cerca assegnato..."
+    breakpoint="1400px"
+    scrollHeight="20rem"
+  >
+    <ng-template pTemplate="item" let-perm>
+      <div class="flex flex-column gap-1 p-2 border-bottom-1 surface-border">
+        <span class="font-bold text-900">{{ perm.name }}</span>
+        <span class="text-sm text-600">{{ perm.description }}</span>
+      </div>
+    </ng-template>
+  </p-picklist>
+
+  <div class="mt-3 flex justify-content-end">
+    <p-button
+      label="Salva Modifiche"
+      icon="pi pi-check"
+      [disabled]="!selectedNode()"
+      (click)="onSaveClicked()"
+    ></p-button>
+  </div>
 </div>
