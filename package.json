@@ -2,13 +2,16 @@
   "name": "prime-ng-study",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:primeNg-study": "node dist/primeNg-study/server/server.mjs"
-  },
+      "ng": "ng",
+      "start": "ng serve",
+      "build": "ng build",
+      "watch": "ng build --watch --configuration development",
+      "test": "ng test",
+      "serve:ssr:primeNg-study": "node dist/primeNg-study/server/server.mjs",
+      "test:server-table": "ng test --include='**/server-table-component.spec.ts'"
+
+
+    },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,

@@ -10,7 +10,11 @@
           [filter]="true"
           filterPlaceholder="Cerca dipendente..."
           scrollHeight="400px"
-        ></p-tree>
+          [pt]="{
+                 root: { class: 'bg-red-200 border-2 border-black-500' },
+              }"
+        >
+        </p-tree>
 
         <div class="mt-4">
           <p>
@@ -68,6 +72,8 @@
   <p-picklist
     [source]="sourcePermissions()"
     [target]="targetPermissions()"
+    ariaLabel="Assegna permessi agli utenti"
+    ariaLabelledBy="picklist-label"
     sourceHeader="Permessi Disponibili"
     targetHeader="Permessi Assegnati"
     [dragdrop]="true"
