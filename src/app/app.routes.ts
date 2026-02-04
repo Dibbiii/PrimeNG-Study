@@ -7,10 +7,15 @@ import { AdminDashboard } from './components/admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
   //{
-    //path: '',
-    //redirectTo: 'users',
-    //pathMatch: 'full',
+  //path: '',
+  //redirectTo: 'users',
+  //pathMatch: 'full',
   //},
+  {
+    path: 'users',
+    redirectTo: 'table/paginated',
+    pathMatch: 'full',
+  },
   {
     path: 'users/form',
     component: UserFormComponent,
@@ -30,5 +35,5 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: AdminDashboard,
-  }
+  },
 ];

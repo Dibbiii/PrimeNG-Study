@@ -1,24 +1,68 @@
 <div class="p-4">
   <h3>Dettagli Utente</h3>
-  
+
   <p><strong>Username:</strong> {{ getUser().username }}</p>
   <p><strong>Email:</strong> {{ getUser().email }}</p>
   <p><strong>ID:</strong> {{ getUser().id }}</p>
 
+  <!-- Divider tra sezione utente e post -->
+  <p-divider />
+
+  <!-- Sezione Post dell'Utente -->
+  <div class="posts-section mt-4">
+    <h4>Post dell'Utente</h4>
+
+    <!-- Loading Spinner -->
+    @if (loadingPosts()) {
+    <div class="flex justify-center items-center py-4">
+      <p-progressSpinner styleClass="w-12 h-12" strokeWidth="4" animationDuration="1s" />
+      <span class="ml-3">Caricamento post...</span>
+    </div>
+    }
+
+    <!-- Errore nel caricamento -->
+    @if (errorPosts()) {
+    <div class="p-4 bg-red-100 text-red-800 rounded-md">
+      <i class="pi pi-exclamation-triangle mr-2"></i>
+      {{ errorPosts() }}
+    </div>
+    }
+
+    <!-- Lista dei Post -->
+    @if (!loadingPosts() && !errorPosts() && posts().length > 0) {
+    <div class="posts-list space-y-3 max-h-96 overflow-y-auto">
+      @for (post of posts(); track post.id) {
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="px-4 pt-4">
+            <h5 class="m-0 font-semibold">{{ post.title }}</h5>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <p class="m-0 text-gray-600">{{ post.body }}</p>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="text-sm text-gray-500">Post ID: {{ post.id }}</div>
+        </ng-template>
+      </p-card>
+      }
+    </div>
+    }
+
+    <!-- Nessun post trovato -->
+    @if (!loadingPosts() && !errorPosts() && posts().length === 0) {
+    <div class="p-4 bg-gray-100 text-gray-600 rounded-md text-center">
+      <i class="pi pi-info-circle mr-2"></i>
+      Nessun post disponibile per questo utente
+    </div>
+    }
+  </div>
+
   <!-- Footer con bottoni -->
+  <p-divider />
   <div class="flex gap-3 mt-4">
-    <p-button 
-      label="Annulla" 
-      icon="pi pi-times"
-      (onClick)="close()"
-      severity="secondary"
-    />
-    
-    <p-button 
-      label="Salva" 
-      icon="pi pi-check"
-      (onClick)="save()"
-      severity="success"
-    />
+    <p-button label="Annulla" icon="pi pi-times" (onClick)="close()" severity="secondary" />
+
+    <p-button label="Salva" icon="pi pi-check" (onClick)="save()" severity="success" />
   </div>
 </div>

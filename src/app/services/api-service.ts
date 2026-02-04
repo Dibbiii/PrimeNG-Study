@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../interfaces/user-interface';
 import { TableData } from '../interfaces/table-data-interface';
@@ -23,15 +23,23 @@ export class ApiService {
   getUsersPaginated(
     skip: number,
     limit: number,
-    sortBy: string,
+    sortBy: string | null,
     order: string,
     q?: string,
   ): Observable<TableData<User>> {
-    let params = `skip=${skip}&limit=${limit}&sortBy=${sortBy}&order=${order}`;
-    if (q) {
-      params += `&q=${q}`;
+    // Usa HttpParams per costruire correttamente la query string
+    let params = new HttpParams()
+      .set('skip', skip.toString())
+      .set('limit', limit.toString())
+      .set('sortBy', sortBy || 'id') // usa 'id' come default se sortBy è null
+      .set('order', order);
+
+    // Aggiungi il parametro q solo se non è vuoto o un oggetto JSON vuoto
+    if (q && q !== '{}' && q.trim() !== '') {
+      params = params.set('q', q);
     }
-    return this.http.get<TableData<User>>(`${this.apiUrl}/users?${params}`);
+
+    return this.http.get<TableData<User>>(`${this.apiUrl}/users`, { params });
   }
 
   // Crea un nuovo utente
