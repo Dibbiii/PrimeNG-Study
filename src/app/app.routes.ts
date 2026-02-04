@@ -6,11 +6,11 @@ import { ServerTableComponent } from './components/server-table-component/server
 import { AdminDashboard } from './components/admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'users',
-    pathMatch: 'full',
-  },
+  //{
+    //path: '',
+    //redirectTo: 'users',
+    //pathMatch: 'full',
+  //},
   {
     path: 'users/form',
     component: UserFormComponent,

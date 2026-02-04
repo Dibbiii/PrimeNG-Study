@@ -1,95 +1,60 @@
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from '../interfaces/user-interface';
+import { TableData } from '../interfaces/table-data-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  http = inject(HttpClient);
-  apiUrl = 'https://dummyjson.com/users';
+  // Punto al Backend Spring Boot
+  private apiUrl = 'http://localhost:8080';
 
+  constructor(private http: HttpClient) {}
+
+  getUsers(page: number, perPage: number): Observable<TableData<User>> {
+    // Spring Boot Pagination usa 'page' (0-based) e 'size'
+    // e risponde con un oggetto { users: [], total: 100 }
+    return this.http.get<TableData<User>>(`${this.apiUrl}/users?page=${page}&size=${perPage}`);
+  }
+
+  // Metodo per la paginazione server-side con Spring Boot
   getUsersPaginated(
     skip: number,
     limit: number,
     sortBy: string,
-    order: 'asc' | 'desc',
-    filter: string = '',
-  ): Observable<{ users: User[]; total: number }> {
-    // Determina se ci sono filtri attivi
-    const hasFilter = this.hasActiveFilter(filter);
-
-    // Se c'è un filtro, carica TUTTI i dati (o un set grande) da pagina 1
-    // Altrimenti usa skip/limit normali per la paginazione
-    const effectiveSkip = hasFilter ? 0 : skip;
-    const effectiveLimit = hasFilter ? 300 : limit; // 300 è abbastanza grande per coprire tutti gli utenti di dummyjson
-
-    const url = `${this.apiUrl}?skip=${effectiveSkip}&limit=${effectiveLimit}&sortBy=${sortBy}&order=${order}`;
-
-    return this.http.get<any>(url).pipe(
-      map((response) => {
-        let users = response.users;
-        let total = response.total;
-
-        // Se c'è un filtro attivo, applicalo lato client su TUTTI i dati caricati
-        if (hasFilter) {
-          users = this.applyFilters(users, filter);
-          total = users.length; // Aggiorna il totale ai risultati filtrati
-        }
-
-        return {
-          users: users,
-          total: total,
-        };
-      }),
-    );
-  }
-
-  /**
-   * Verifica se ci sono filtri attivi nel filtro string
-   */
-  private hasActiveFilter(filter: string): boolean {
-    try {
-      if (!filter) {
-        return false;
-      }
-      const filterObj = JSON.parse(filter);
-      const username = filterObj.username?.trim() || '';
-      const email = filterObj.email?.trim() || '';
-      return username.length > 0 || email.length > 0;
-    } catch (e) {
-      return false;
+    order: string,
+    q?: string,
+  ): Observable<TableData<User>> {
+    let params = `skip=${skip}&limit=${limit}&sortBy=${sortBy}&order=${order}`;
+    if (q) {
+      params += `&q=${q}`;
     }
+    return this.http.get<TableData<User>>(`${this.apiUrl}/users?${params}`);
   }
 
-  /**
-   * Applica i filtri ai dati lato client
-   */
-  private applyFilters(users: User[], filter: string): User[] {
-    try {
-      const filterObj = JSON.parse(filter);
-      const usernameSearch = filterObj.username?.toLowerCase().trim() || '';
-      const emailSearch = filterObj.email?.toLowerCase().trim() || '';
+  // Crea un nuovo utente
+  // Omit crea un nuovo tipo escludendo specifiche proprietà da un tipo esistente
+  // Sintassi: Omit<Type, Keys>
+  // Type: il tipo di partenza
+  // Keys: le proprietà da escludere -> in questo caso l'id perchè viene generato da SpringBoot
 
-      return users.filter((user: User) => {
-        const matchUsername = usernameSearch
-          ? user.username.toLowerCase().includes(usernameSearch)
-          : true;
-
-        const matchEmail = emailSearch ? user.email.toLowerCase().includes(emailSearch) : true;
-
-        return matchUsername && matchEmail;
-      });
-    } catch (e) {
-      console.error('Filter parse error:', e);
-      return users;
-    }
+  createUser(user: Omit<User, 'id'>): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/users`, user);
   }
 
-  getTotalRecords(): Observable<number> {
-    return this.http
-      .get<{ users: User[]; total: number }>(this.apiUrl)
-      .pipe(map((response) => response.total));
+  // Aggiorna un utente esistente
+  updateUser(id: number, user: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/${id}`, user);
+  }
+
+  // Elimina un utente
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
+  }
+
+  getUserPosts(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/users/${userId}/posts`);
   }
 }
