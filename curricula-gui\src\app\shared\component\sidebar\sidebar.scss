@@ -1,0 +1,39 @@
+.sidebar-menu-container {
+  height: 100%;
+    ::ng-deep p-accordion {
+
+        .sidebar-accordion-title {
+            display: flex;
+            gap: 10px;
+        }
+
+        .p-accordionpanel:not(.p-disabled).p-accordionpanel-active > .p-accordionheader.p-accordionheader,
+        .p-accordioncontent-content.p-accordioncontent-content,
+        .p-accordionheader.p-accordionheader {
+            background: transparent;
+            background-color: transparent;
+
+            color: var(--p-primary-1300); /* Ora punta al token del testo nero */
+        }
+
+        .p-accordioncontent-content {
+            display: flex;
+            flex-direction: column;
+
+            padding: 10px;
+
+            .sidebar-menu {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px;
+                cursor: pointer;
+
+                &.active.sidebar-menu {
+                    background-color: var(--p-primary-500); /* Colore attivo dalla palette */
+                    color: white;
+                }
+            }
+        }
+    }
+}
