@@ -25,14 +25,14 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
   styleUrl: './job-details.scss',
 })
 export class JobDetails {
-  // Remote Policy
-  remotePolicy: string = 'hybrid'; // In-office or remote
-  remoteRequirement: string = 'yes';
-  wfhAllowed: boolean = true;
+  // Remote Policy partono nulli per mostrare il modulo vuoto all'inizio
+  remotePolicy: string | null = null; 
+  remoteRequirement: string | null = null;
+  wfhAllowed: boolean = false;
   
   // Locations
-  selectedRegion: string = 'Italy';
-  selectedCity: string = 'Bologna, Italy';
+  selectedRegion: string | null = null;
+  selectedCity: string | null = null;
   
   regionOptions = [
     { label: 'Italy', value: 'Italy' },
@@ -44,15 +44,14 @@ export class JobDetails {
     { label: 'Bologna, Italy', value: 'Bologna, Italy' },
     { label: 'Milan, Italy', value: 'Milan, Italy' },
     { label: 'Rome, Italy', value: 'Rome, Italy' }
-    // Aggiungere Altro: specifica la tua città
   ];
 
   // Compensation
   currency: string = 'EUR';
-  minSalary: number | null = 35000;
-  maxSalary: number | null = 50000;
+  minSalary: number | null = null;
+  maxSalary: number | null = null;
   salaryPeriod: string = 'Annual';
-  showSalary: boolean = true;
+  showSalary: boolean = false;
   
   currencyOptions = [
     { label: '€ EUR', value: 'EUR' },
@@ -70,7 +69,7 @@ export class JobDetails {
   showEquity: boolean = false;
 
   // Employment
-  employmentType: string = 'Full-time';
+  employmentType: string | null = null;
   employmentTypeOptions = [
     { label: 'Full-time', value: 'Full-time' },
     { label: 'Part-time', value: 'Part-time' },
@@ -80,5 +79,5 @@ export class JobDetails {
   ];
 
   // Visa
-  visaSponsorship: string = 'no';
+  visaSponsorship: string | null = null;
 }

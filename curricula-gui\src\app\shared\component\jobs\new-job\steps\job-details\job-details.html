@@ -1,0 +1,226 @@
+<div
+  class="bg-white p-8 rounded-2xl border-surface-200 border-0.25 border-gray-300 shadow-sm flex flex-col gap-10"
+>
+  <!-- Sezione Remote Policy (Sempre visibile) -->
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-bold text-surface-900">
+        What is your remote policy for this job?
+      </h3>
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-2">
+          <p-radioButton
+            name="remotePolicy"
+            value="office"
+            [(ngModel)]="remotePolicy"
+            id="policy-office"
+          />
+          <label for="policy-office" class="text-surface-700">In-office</label>
+        </div>
+        <div class="flex items-center gap-2">
+          <p-radioButton
+            name="remotePolicy"
+            value="hybrid"
+            [(ngModel)]="remotePolicy"
+            id="policy-hybrid"
+          />
+          <label for="policy-hybrid" class="text-surface-700"
+            >In-office or remote</label
+          >
+        </div>
+        <div class="flex items-center gap-2">
+          <p-radioButton
+            name="remotePolicy"
+            value="remote"
+            [(ngModel)]="remotePolicy"
+            id="policy-remote"
+          />
+          <label for="policy-remote" class="text-surface-700"
+            >Remote only</label
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Il resto del modulo appare solo quando viene selezionata una policy -->
+    @if (remotePolicy) {
+    <div class="flex flex-col gap-10">
+      <!-- Location Requirements -->
+      <div class="flex flex-col gap-3">
+        <h3 class="text-base font-bold text-surface-900">
+          Are remote employees required to live in a specific location?
+        </h3>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <p-radioButton
+              name="remoteRequirement"
+              value="yes"
+              [(ngModel)]="remoteRequirement"
+              id="req-yes"
+            />
+            <label for="req-yes" class="text-surface-700">Yes</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <p-radioButton
+              name="remoteRequirement"
+              value="no"
+              [(ngModel)]="remoteRequirement"
+              id="req-no"
+            />
+            <label for="req-no" class="text-surface-700"
+              >No (can work from anywhere)</label
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-checkbox [(ngModel)]="wfhAllowed" [binary]="true" id="wfh-allowed" />
+        <label for="wfh-allowed" class="text-surface-700">
+          In-office employees may work from home a few days per week
+        </label>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-surface-700"
+            >Remote regions</label
+          >
+          <p-select
+            [options]="regionOptions"
+            [(ngModel)]="selectedRegion"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full md:w-60"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-surface-700"
+            >In-office cities</label
+          >
+          <p-select
+            [options]="cityOptions"
+            [(ngModel)]="selectedCity"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full md:w-60"
+          />
+        </div>
+      </div>
+
+      <!-- Compensation Section -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-base font-bold text-surface-900">Compensation Range</h3>
+        <div class="flex items-center gap-4 flex-wrap">
+          <p-select
+            [options]="currencyOptions"
+            [(ngModel)]="currency"
+            optionLabel="label"
+            optionValue="value"
+            class="w-36 flex-shrink-0"
+          />
+
+          <p-inputNumber
+            [(ngModel)]="minSalary"
+            placeholder="Min"
+            [useGrouping]="false"
+            styleClass="w-44"
+          />
+
+          <span class="text-surface-400">—</span>
+
+          <p-inputNumber
+            [(ngModel)]="maxSalary"
+            placeholder="Max"
+            [useGrouping]="false"
+            styleClass="w-44"
+          />
+
+          <p-select
+            [options]="periodOptions"
+            [(ngModel)]="salaryPeriod"
+            optionLabel="label"
+            optionValue="value"
+            class="w-36 flex-shrink-0"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <p-toggleSwitch [(ngModel)]="showSalary" id="show-salary" />
+          <label for="show-salary" class="text-sm text-surface-700"
+            >Show compensation on job posting</label
+          >
+        </div>
+      </div>
+
+      <!-- Equity Range Section -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-base font-bold text-surface-900">Equity Range</h3>
+        <div class="flex items-center gap-3">
+          <p-inputNumber
+            [(ngModel)]="minEquity"
+            placeholder="Min"
+            class="flex-1"
+            styleClass="w-full"
+          />
+
+          <span class="text-surface-400">—</span>
+
+          <p-inputNumber
+            [(ngModel)]="maxEquity"
+            placeholder="Max"
+            class="flex-1"
+            styleClass="w-full"
+          />
+
+          <span class="text-surface-500 font-medium ml-1">%</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <p-toggleSwitch [(ngModel)]="showEquity" id="show-equity" />
+          <label for="show-equity" class="text-sm text-surface-700"
+            >Show equity on job posting</label
+          >
+        </div>
+      </div>
+
+      <!-- Employment Type Section -->
+      <div class="flex flex-col gap-2">
+        <h3 class="text-base font-bold text-surface-900">Employment Type</h3>
+        <p-select
+          [options]="employmentTypeOptions"
+          [(ngModel)]="employmentType"
+          optionLabel="label"
+          optionValue="value"
+          class="w-40"
+        />
+      </div>
+
+      <!-- Visa Section -->
+      <div class="flex flex-col gap-3">
+        <h3 class="text-base font-bold text-surface-900">
+          Are you open to sponsor a candidate's visa?
+        </h3>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <p-radioButton
+              name="visa"
+              value="yes"
+              [(ngModel)]="visaSponsorship"
+              id="visa-yes"
+            />
+            <label for="visa-yes" class="text-surface-700">Yes</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <p-radioButton
+              name="visa"
+              value="no"
+              [(ngModel)]="visaSponsorship"
+              id="visa-no"
+            />
+            <label for="visa-no" class="text-surface-700">No</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>
