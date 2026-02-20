@@ -42,10 +42,9 @@
       </div>
     </div>
 
-    <!-- Il resto del modulo appare solo quando viene selezionata una policy -->
+    <!-- Il resto del modulo appare solo dopo la selezione -->
     @if (remotePolicy) {
     <div class="flex flex-col gap-10">
-      <!-- Location Requirements -->
       <div class="flex flex-col gap-3">
         <h3 class="text-base font-bold text-surface-900">
           Are remote employees required to live in a specific location?
@@ -108,7 +107,7 @@
         </div>
       </div>
 
-      <!-- Compensation Section -->
+      <!-- Sezione Compensation -->
       <div class="flex flex-col gap-4">
         <h3 class="text-base font-bold text-surface-900">Compensation Range</h3>
         <div class="flex items-center gap-4 flex-wrap">
@@ -152,7 +151,7 @@
         </div>
       </div>
 
-      <!-- Equity Range Section -->
+      <!-- Sezione Equity -->
       <div class="flex flex-col gap-4">
         <h3 class="text-base font-bold text-surface-900">Equity Range</h3>
         <div class="flex items-center gap-3">
@@ -182,7 +181,7 @@
         </div>
       </div>
 
-      <!-- Employment Type Section -->
+      <!-- Sezione Employment Type -->
       <div class="flex flex-col gap-2">
         <h3 class="text-base font-bold text-surface-900">Employment Type</h3>
         <p-select
@@ -192,33 +191,6 @@
           optionValue="value"
           class="w-40"
         />
-      </div>
-
-      <!-- Visa Section -->
-      <div class="flex flex-col gap-3">
-        <h3 class="text-base font-bold text-surface-900">
-          Are you open to sponsor a candidate's visa?
-        </h3>
-        <div class="flex flex-col gap-3">
-          <div class="flex items-center gap-2">
-            <p-radioButton
-              name="visa"
-              value="yes"
-              [(ngModel)]="visaSponsorship"
-              id="visa-yes"
-            />
-            <label for="visa-yes" class="text-surface-700">Yes</label>
-          </div>
-          <div class="flex items-center gap-2">
-            <p-radioButton
-              name="visa"
-              value="no"
-              [(ngModel)]="visaSponsorship"
-              id="visa-no"
-            />
-            <label for="visa-no" class="text-surface-700">No</label>
-          </div>
-        </div>
       </div>
     </div>
     }
