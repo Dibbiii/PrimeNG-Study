@@ -25,7 +25,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
   styleUrl: './job-details.scss',
 })
 export class JobDetails {
-  // Remote Policy partono nulli per mostrare il modulo vuoto all'inizio
+  // Remote Policy
   remotePolicy: string | null = null; 
   remoteRequirement: string | null = null;
   wfhAllowed: boolean = false;
